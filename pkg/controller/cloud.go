@@ -58,9 +58,9 @@ type AccountValue struct {
 type AWSAccount struct {
 	Cloud      string `json:"cloud"`      // "AWS",
 	Bucket     string `json:"bucket"`     // "terminus-us-west-1",
-	Token      string `json:"st"`         // "FwoGZXIvYXdzEDUaDJ23bkQXpskuAe1x/SLXARxO/VhjIx90PaRCEIlliPb6YMAZVwF9DIJ+Kk072QHrmcgoZtmasBAPSI3YK3SxkBjGB8Ov9LrfcCjVU29Dk7ohPpV9jWU54EZYrZFIP3yylDc86SRvaQu3kNGNRYjWcs7ixwkVJPnh6z2KATnkJwe0nvQfHwfi7qeoCXfgrL7QXwY3sL7prNIERRf9hskTlrxJzCMB+AM+9JZpHLdPgXvLshwBlx0JDoXodxW0tPjNiHxXdMeejKO4bmxl2KoXU5cU9Dy8XQGSoaxsHcPzVMUzWUL7kN6NKKe/oq0GMi0pi3C4vMhG/igwttAKdUuwGA9AjU+KGJ7wQK/kOUqeENkyPfK0bCTiPAXoosc=",
+	Token      string `json:"st"`         // "session token",
 	Prefix     string `json:"prefix"`     // "fbcf5f573ed242c28758-342957450633",
-	Secret     string `json:"sk"`         // "DihjPit9tL0cMlePboSHtoivLdYTojazQMbGeXcK",
+	Secret     string `json:"sk"`         // "secret",
 	Key        string `json:"ak"`         // "ASIAVJDTX4VST3ZPDMUV",
 	Expiration string `json:"expiration"` // "1705550635000",
 	Region     string `json:"region"`     // "us-west-1"
