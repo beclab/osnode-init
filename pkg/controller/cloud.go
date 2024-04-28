@@ -61,7 +61,7 @@ type AWSAccount struct {
 	Token      string `json:"st"`         // "session token",
 	Prefix     string `json:"prefix"`     // "fbcf5f573ed242c28758-342957450633",
 	Secret     string `json:"sk"`         // "secret",
-	Key        string `json:"ak"`         // "ASIAVJDTX4VST3ZPDMUV",
+	Key        string `json:"ak"`         // "access",
 	Expiration string `json:"expiration"` // "1705550635000",
 	Region     string `json:"region"`     // "us-west-1"
 }
