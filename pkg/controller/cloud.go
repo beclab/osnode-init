@@ -56,14 +56,14 @@ type AccountValue struct {
 }
 
 type AWSAccount struct {
-	Cloud      string `json:"cloud"`      // "AWS",
-	Bucket     string `json:"bucket"`     // "terminus-us-west-1",
-	Token      string `json:"st"`         // "session token",
-	Prefix     string `json:"prefix"`     // "fbcf5f573ed242c28758-342957450633",
-	Secret     string `json:"sk"`         // "secret",
-	Key        string `json:"ak"`         // "access",
-	Expiration string `json:"expiration"` // "1705550635000",
-	Region     string `json:"region"`     // "us-west-1"
+	Cloud      string `json:"cloud"`
+	Bucket     string `json:"bucket"`
+	Token      string `json:"st"`
+	Prefix     string `json:"prefix"`
+	Secret     string `json:"sk"`
+	Key        string `json:"ak"`
+	Expiration string `json:"expiration"`
+	Region     string `json:"region"`
 }
 
 type AWSAccountResponse struct {
