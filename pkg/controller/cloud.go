@@ -88,7 +88,7 @@ var (
 
 func getAccountFromSettings(admin string) (userid, token string, err error) {
 	settingsUrl := fmt.Sprintf("http://settings-service.user-space-%s/api/account", admin)
-	client := resty.New().SetTimeout(2 * time.Second)
+	client := resty.New().SetTimeout(2 * time.Second).SetRetryCount(3)
 
 	req := &ProxyRequest{
 		Op:       "getAccount",
@@ -158,7 +158,11 @@ func GetAwsAccountFromCloud(ctx context.Context, client dynamic.Interface, bucke
 		return nil, err
 	}
 
-	httpClient := resty.New().SetTimeout(15 * time.Second).SetDebug(true)
+	httpClient := resty.New().SetTimeout(15 * time.Second).
+		SetDebug(true).
+		SetRetryCount(5).
+		SetRetryWaitTime(30 * time.Second).
+		SetRetryMaxWaitTime(180 * time.Second)
 	duration := 12 * time.Hour
 	resp, err := httpClient.R().
 		SetFormData(map[string]string{

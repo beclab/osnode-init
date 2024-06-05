@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -42,7 +43,8 @@ func NewNodeInitController(c client.Client, schema *runtime.Scheme, config *rest
 	nic := &NodeInitController{Client: c, scheme: schema, cron: cron.New()}
 	schedule := os.Getenv("SCHEDULE")
 	if schedule == "" {
-		schedule = "0 */8 * * *"
+		// random timer schedule, to avoid too much concurrent api requets
+		schedule = fmt.Sprintf("%d */8 * * *", time.Now().Minute())
 	}
 
 	if isMaster, _, err := nic.isMasterNode(config); err != nil {
