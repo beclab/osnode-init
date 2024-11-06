@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/emicklei/go-restful/v3"
@@ -151,7 +153,12 @@ func getAccountFromSettings(admin string) (userid, token string, err error) {
 
 func GetAwsAccountFromCloud(ctx context.Context, client dynamic.Interface, bucket string) (*AWSAccount, error) {
 	// cloudUrl := "https://cloud-dev-api.bttcdn.com/v1/resource/stsToken"
-	cloudUrl := "https://cloud-api.bttcdn.com/v1/resource/stsToken/setup"
+	cloudHost := "https://cloud-api.bttcdn.com"
+	cloudHostFromEnv := os.Getenv("OLARES_SPACE_URL")
+	if cloudHostFromEnv != "" {
+		cloudHost = cloudHostFromEnv
+	}
+	cloudURL := fmt.Sprintf("%s/v1/resource/stsToken/setup", strings.TrimSuffix(cloudHost, "/"))
 
 	clusterId, ak, sk, st, err := getClusterId(ctx, client)
 	if err != nil {
@@ -175,10 +182,10 @@ func GetAwsAccountFromCloud(ctx context.Context, client dynamic.Interface, bucke
 			"durationSeconds": fmt.Sprintf("%.0f", duration.Seconds()),
 		}).
 		SetResult(&AWSAccountResponse{}).
-		Post(cloudUrl)
+		Post(cloudURL)
 
 	if err != nil {
-		klog.Error("fetch data from cloud error, ", err, ", ", cloudUrl)
+		klog.Error("fetch data from cloud error, ", err, ", ", cloudURL)
 		return nil, err
 	}
 
