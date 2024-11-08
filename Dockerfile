@@ -25,7 +25,7 @@ FROM gcr.io/distroless/base:debug
 WORKDIR /
 COPY --from=builder /workspace/osnode_init .
 
-VOLUME [ "/terminus" ]
+VOLUME [ "/olares" ]
 
 ENTRYPOINT ["/osnode_init"]
 
