@@ -58,7 +58,7 @@ func ToJSON(v any) string {
 }
 
 func getRedisIpAndPassword() (ip string, pwd string, err error) {
-	file, err := os.ReadFile("/terminus/data/redis/etc/redis.conf")
+	file, err := os.ReadFile("/olares/data/redis/etc/redis.conf")
 	if err != nil {
 		return
 	}
