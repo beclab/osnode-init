@@ -22,7 +22,7 @@ func getAdminUser(ctx context.Context, client dynamic.Interface) (string, error)
 	}
 
 	for _, u := range unstructuredUsers.Items {
-		if a, ok := u.GetAnnotations()["bytetrade.io/owner-role"]; ok && a == "platform-admin" {
+		if a, ok := u.GetAnnotations()["bytetrade.io/owner-role"]; ok && (a == "owner" || a == "admin") {
 			return u.GetName(), nil
 		}
 	}
