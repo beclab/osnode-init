@@ -2,14 +2,12 @@ package controllers
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
 	"strings"
 	"time"
 
-	"github.com/emicklei/go-restful/v3"
 	"github.com/go-resty/resty/v2"
 	"github.com/pkg/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -87,69 +85,6 @@ var (
 		Resource: "terminus",
 	}
 )
-
-func getAccountFromSettings(admin string) (userid, token string, err error) {
-	settingsUrl := fmt.Sprintf("http://settings-service.user-space-%s/api/account", admin)
-	client := resty.New().SetTimeout(2 * time.Second).SetRetryCount(3)
-
-	req := &ProxyRequest{
-		Op:       "getAccount",
-		DataType: "account",
-		Version:  "v1",
-		Group:    "service.settings",
-		Data:     "settings-account-space",
-	}
-
-	terminusNonce, err := GenTerminusNonce()
-	if err != nil {
-		klog.Error("generate nonce error, ", err)
-		return
-	}
-
-	klog.Info("fetch account from settings, ", settingsUrl)
-	resp, err := client.R().SetDebug(true).
-		SetHeader(restful.HEADER_ContentType, restful.MIME_JSON).
-		SetHeader("Terminus-Nonce", terminusNonce).
-		SetBody(req).
-		SetResult(&AccountResponse{}).
-		Post(settingsUrl)
-
-	if err != nil {
-		klog.Error("request settings account api error, ", err)
-		return
-	}
-
-	if resp.StatusCode() != http.StatusOK {
-		klog.Error("request settings account api response not ok, ", resp.StatusCode())
-		err = fmt.Errorf("settings account response, %d, %s", resp.StatusCode(), string(resp.Body()))
-		return
-	}
-
-	accountResp := resp.Result().(*AccountResponse)
-	klog.Infof("settings account api response, %+v", accountResp)
-	if accountResp.Code != 0 {
-		klog.Error("request settings account api response error, ", accountResp.Code, ", ", accountResp.Message)
-		err = errors.New(accountResp.Message)
-		return
-	}
-
-	if accountResp.Data == nil {
-		klog.Error("request settings account api response data is nil, ", accountResp.Code, ", ", accountResp.Message)
-		err = errors.New("request settings account api response data is nil")
-		return
-	}
-
-	var value AccountValue
-	err = json.Unmarshal([]byte(accountResp.Data.Value), &value)
-	if err != nil {
-		klog.Error("parse value error, ", err, ", ", value)
-		return
-	}
-	userid = value.Userid
-	token = value.Token
-
-	return
-}
 
 func GetAwsAccountFromCloud(ctx context.Context, client dynamic.Interface, bucket string) (*AWSAccount, error) {
 	// cloudUrl := "https://cloud-dev-api.bttcdn.com/v1/resource/stsToken"

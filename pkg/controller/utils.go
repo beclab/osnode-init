@@ -4,31 +4,11 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"os"
-	"strconv"
 	"strings"
-	"time"
 )
-
-func GenTerminusNonce() (string, error) {
-	randomKey := os.Getenv("APP_RANDOM_KEY")
-	timestamp := getTimestamp()
-	cipherText, err := AesEncrypt([]byte(timestamp), []byte(randomKey))
-	if err != nil {
-		return "", err
-	}
-	b64CipherText := base64.StdEncoding.EncodeToString(cipherText)
-	terminusNonce := "appservice:" + b64CipherText
-	return terminusNonce, nil
-}
-
-func getTimestamp() string {
-	t := time.Now().Unix()
-	return strconv.Itoa(int(t))
-}
 
 func AesEncrypt(origin, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
