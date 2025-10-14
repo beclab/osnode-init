@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"os"
-	"strings"
+	"net/url"
 	"time"
 
+	"bytetrade.io/web3os/osnode-init/pkg/constants"
 	"github.com/go-resty/resty/v2"
 	"github.com/pkg/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -87,13 +87,10 @@ var (
 )
 
 func GetAwsAccountFromCloud(ctx context.Context, client dynamic.Interface, bucket string) (*AWSAccount, error) {
-	// cloudUrl := "https://cloud-dev-api.bttcdn.com/v1/resource/stsToken"
-	cloudHost := "https://cloud-api.bttcdn.com"
-	cloudHostFromEnv := os.Getenv("OLARES_SPACE_URL")
-	if cloudHostFromEnv != "" {
-		cloudHost = cloudHostFromEnv
+	cloudURL, err := url.JoinPath(constants.OlaresRemoteService, "/space/v1/resource/stsToken/setup")
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse cloud url: %w, OlaresRemoteService: %s", err, constants.OlaresRemoteService)
 	}
-	cloudURL := fmt.Sprintf("%s/v1/resource/stsToken/setup", strings.TrimSuffix(cloudHost, "/"))
 
 	clusterId, ak, sk, st, err := getClusterId(ctx, client)
 	if err != nil {

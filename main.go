@@ -79,6 +79,11 @@ func run() error {
 		return errors.Errorf("unable to create nodeInitController: %v", err)
 	}
 
+	// start system env watcher to update runtime constants
+	if err = mgr.Add(controllers.NewSystemEnvWatcher(mgr.GetConfig())); err != nil {
+		return errors.Errorf("unable to start system env watcher: %v", err)
+	}
+
 	log.Info("starting manager")
 
 	if err = mgr.Start(ctrl.SetupSignalHandler()); err != nil {
